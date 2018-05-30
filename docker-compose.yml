@@ -1,0 +1,38 @@
+version: '3'
+services:
+  api:
+    build: .
+    ports:
+      - "8000:5000"
+    volumes:
+      - .:/app
+    restart: always
+    depends_on:
+      - postgres
+    links:
+      - postgres:postgres
+    environment:
+      - DEBUG=True
+      - SECRET_KEY=5(15ds+i2+%ik6z&!yer+ga9m=e%jcqiz_5wszg)r-z!2--b2d
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASS=postgres
+      - DB_SERVICE=postgres
+      - DB_PORT=5432
+      - PATH_TO_SSH_KEY=tk
+      - SSH_PORT=tk
+      - IP=tk
+  postgres:
+    restart: always
+    image: postgres:latest
+    volumes:
+      - db_data:/var/lib/postgresql
+    ports:
+      - "5432:5432"
+    environment:
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASS=postgres
+
+volumes:
+  db_data:
