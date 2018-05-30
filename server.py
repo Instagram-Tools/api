@@ -11,12 +11,12 @@ db = SQLAlchemy(app)
 import models
 
 
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/', methods=['GET'])
 def index():
     try:
         data = json.loads(request.data)
 
-        return data
+        return str(data)
     except Exception as exc:
         return str(exc)
 
