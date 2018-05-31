@@ -12,11 +12,11 @@ import models
 
 
 @app.route('/', methods=['GET'])
-def index():
+def get_root():
     try:
-        data = json.loads(request.data)
+        # data = json.loads(request.data)
 
-        return str(data)
+        return str(request.args)
     except Exception as exc:
         return str(exc)
 
