@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import request
+from flask import jsonify
 from flask_sqlalchemy import SQLAlchemy
 from config import BaseConfig
 import json
@@ -18,7 +19,7 @@ def get_root():
     try:
         # data = json.loads(request.data)
 
-        return str(request.args)
+        return jsonify(request.args)
     except Exception as exc:
         return str(exc)
 
