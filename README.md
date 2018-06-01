@@ -4,7 +4,7 @@
     docker-compose up
     
 ## init DataBase
-    docker-compose run manager /usr/local/bin/python create_db.py
+    docker-compose run api /usr/local/bin/python create_db.py
 
 ## install from requirements.txt
     pip install -r requirements.txt
