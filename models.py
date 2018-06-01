@@ -1,4 +1,5 @@
 from server import db
+import json
 
 
 class User(db.Model):
@@ -22,6 +23,9 @@ class TimeTable(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     start = db.Column(db.DateTime(), nullable=False)
     end = db.Column(db.DateTime(), nullable=False)
+
+    def to_json(self):
+        return {"start": str(self.start), "end": str(self.end)}
 
     def __repr__(self):
         return '<TimeTable %r %r:%r>' % (self.user_id, str(self.start), str(self.end))

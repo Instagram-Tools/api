@@ -6,7 +6,6 @@ from config import BaseConfig
 import json
 from time_util import parse_datetime
 
-
 app = Flask(__name__)
 app.config.from_object(BaseConfig)
 db = SQLAlchemy(app)
@@ -17,9 +16,17 @@ import models
 @app.route('/', methods=['GET'])
 def get_root():
     try:
-        # data = json.loads(request.data)
+        user = request.args.get("user")
+        first = models.User.query.filter_by(username=user).first()
 
-        return jsonify(request.args)
+        if first:
+            class Encoder(json.JSONEncoder):
+                def default(self, o):
+                    return o.to_json()
+            tables = json.dumps(first.timetables, cls=Encoder)
+            return jsonify({"settings": first.settings, "timetables": tables})
+        else:
+            return jsonify({"settings": {}, "timetables": []})
     except Exception as exc:
         return str(exc)
 
