@@ -1,5 +1,4 @@
 from server import db
-import json
 
 
 class User(db.Model):
