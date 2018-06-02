@@ -4,7 +4,7 @@ from flask import jsonify
 from flask_sqlalchemy import SQLAlchemy
 from config import BaseConfig
 import json
-from time_util import parse_datetime
+from time_util import parse_datetime, timestamp
 
 app = Flask(__name__)
 app.config.from_object(BaseConfig)
@@ -17,14 +17,16 @@ import models
 def get_root():
     try:
         user = request.args.get("user")
-        first = models.User.query.filter_by(username=user).first()
+        first: models.User = models.User.query.filter_by(username=user).first()
 
         if first:
             class Encoder(json.JSONEncoder):
                 def default(self, o):
                     return o.to_json()
+
             tables = json.dumps(first.timetables, cls=Encoder)
-            return jsonify({"settings": first.settings, "timetables": tables})
+            return jsonify({"settings": first.settings, "timetables": tables,
+                            "timestamp": str(first.timestamp)})
         else:
             return jsonify({"settings": {}, "timetables": []})
     except Exception as exc:
@@ -45,7 +47,7 @@ def put_root():
 
 def update_user(data):
     user = models.User(username=data.get("username"), password=data.get("password"),
-                       settings=data.get("settings"))
+                       settings=data.get("settings"), timestamp=timestamp())
     first = models.User.query.filter_by(username=user.username).first()
     if first:
         first.password = user.password

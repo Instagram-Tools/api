@@ -20,3 +20,7 @@ def parse_datetime_prefix(line, fmt):
         else:
             raise
     return t
+
+
+def timestamp():
+    return datetime.datetime.now()

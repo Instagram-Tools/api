@@ -10,6 +10,7 @@ class User(db.Model):
     settings = db.Column(db.Text(), nullable=False)
     timetables = db.relationship('TimeTable', backref='user', lazy=True)
     running = db.relationship('Running', backref='user', lazy=True)
+    timestamp = db.Column(db.TIMESTAMP, nullable=False)
 
     def __repr__(self):
         return '<User %r>' % self.username
