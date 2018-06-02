@@ -52,6 +52,7 @@ def update_user(data):
     if first:
         first.password = user.password
         first.settings = user.settings
+        first.timestamp = user.timestamp
 
         for t in first.timetables:
             db.session.delete(t)
