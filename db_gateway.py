@@ -34,8 +34,7 @@ class DB_GateWay:
             first.settings = user.settings
             first.timestamp = user.timestamp
 
-            for t in first.timetables:
-                self.db.session.delete(t)
+            self.models.TimeTable.query.filter_by(user_id=first.id).delete()
 
             self.db.session.commit()
             return first
