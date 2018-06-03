@@ -26,6 +26,16 @@ class DB_GateWay:
             return jsonify({"settings": {}, "timetables": []})
 
     def update_user(self, data):
+        first: self.models.User = self.models.User.query.filter_by(username=data.get("username")).first()
+        if first:
+            if data.get("password"):
+                first.password = data.get("password")
+            if data.get("settings"):
+                first.settings = data.get("settings")
+            first.timestamp = timestamp()
+            self.db.session.commit()
+            return first
+
         user = self.models.User(username=data.get("username"), password=data.get("password"),
                                 settings=data.get("settings"), timestamp=timestamp())
         self.db.session.add(user)
@@ -33,13 +43,14 @@ class DB_GateWay:
         return user
 
     def update_timetable(self, user, data):
-        timetable = data.get("timetable", [])
-        self.deleteTimeTables(user)
-        for i in range(0, len(timetable), 2):
-            timetable = self.models.TimeTable(user_id=user.id, start=parse_datetime(timetable[i]),
-                                              end=parse_datetime(timetable[i + 1]))
-            self.db.session.add(timetable)
-        self.db.session.commit()
+        timetable = data.get("timetable")
+        if timetable:
+            self.deleteTimeTables(user)
+            for i in range(0, len(timetable), 2):
+                timetable = self.models.TimeTable(user_id=user.id, start=parse_datetime(timetable[i]),
+                                                  end=parse_datetime(timetable[i + 1]))
+                self.db.session.add(timetable)
+            self.db.session.commit()
 
-    def delete_time_tables(self, user):
+    def deleteTimeTables(self, user):
         self.models.TimeTable.query.filter_by(user_id=user.id).delete()

@@ -25,6 +25,10 @@ def get_root():
 def put_root():
     try:
         data = json.loads(request.data)
+
+        if len(data) <= 1:
+            return "nothing to update"
+
         user = dbg.update_user(data)
         dbg.update_timetable(user, data)
 
