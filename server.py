@@ -1,9 +1,10 @@
+import json
+
 from flask import Flask
 from flask import request
 from flask_sqlalchemy import SQLAlchemy
-from config import BaseConfig
-import json
 
+from config import BaseConfig
 from db_gateway import DB_GateWay
 
 app = Flask(__name__)
