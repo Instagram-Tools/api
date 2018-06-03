@@ -37,8 +37,9 @@ class DB_GateWay:
             for t in first.timetables:
                 self.db.session.delete(t)
 
-            self.db.session.add(first)
-            user = first
+            self.db.session.commit()
+            return first
+
         self.db.session.add(user)
         self.db.session.commit()
         return user
