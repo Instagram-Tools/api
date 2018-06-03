@@ -27,8 +27,8 @@ class DB_GateWay:
 
     def update_user(self, data):
         user = self.models.User(username=data.get("username"), password=data.get("password"),
-                           settings=data.get("settings"), timestamp=timestamp())
-        first = self.models.User.query.filter_by(username=user.username).first()
+                                settings=data.get("settings"), timestamp=timestamp())
+        first: self.models.User = self.models.User.query.filter_by(username=user.username).first()
         if first:
             first.password = user.password
             first.settings = user.settings
@@ -47,6 +47,6 @@ class DB_GateWay:
         timetable = data.get("timetable", [])
         for i in range(0, len(timetable), 2):
             timetable = self.models.TimeTable(user_id=user.id, start=parse_datetime(timetable[i]),
-                                         end=parse_datetime(timetable[i + 1]))
+                                              end=parse_datetime(timetable[i + 1]))
             self.db.session.add(timetable)
         self.db.session.commit()
