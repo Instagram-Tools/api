@@ -17,20 +17,23 @@ import models
 def get_root():
     try:
         user = request.args.get("user")
-        first: models.User = models.User.query.filter_by(username=user).first()
-
-        if first:
-            class Encoder(json.JSONEncoder):
-                def default(self, o):
-                    return o.to_json()
-
-            tables = json.dumps(first.timetables, cls=Encoder)
-            return jsonify({"settings": first.settings, "timetables": tables,
-                            "timestamp": str(first.timestamp)})
-        else:
-            return jsonify({"settings": {}, "timetables": []})
+        return get_user_data(user)
     except Exception as exc:
         return str(exc)
+
+
+def get_user_data(user):
+    first: models.User = models.User.query.filter_by(username=user).first()
+    if first:
+        class Encoder(json.JSONEncoder):
+            def default(self, o):
+                return o.to_json()
+
+        tables = json.dumps(first.timetables, cls=Encoder)
+        return jsonify({"settings": first.settings, "timetables": tables,
+                        "timestamp": str(first.timestamp)})
+    else:
+        return jsonify({"settings": {}, "timetables": []})
 
 
 @app.route('/', methods=['PUT'])
