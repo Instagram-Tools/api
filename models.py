@@ -11,6 +11,8 @@ class User(db.Model):
     timetables = db.relationship('TimeTable', backref='user', lazy=True)
     running = db.relationship('Running', backref='user', lazy=True)
     timestamp = db.Column(db.TIMESTAMP, nullable=False)
+    paid = db.Column(db.Boolean, default=False)
+    started = db.Column(db.Boolean, default=True)
 
     def __repr__(self):
         return '<User %r>' % self.username
