@@ -37,7 +37,8 @@ class DB_GateWay:
             return first
 
         user = self.models.User(username=data.get("username"), password=data.get("password"),
-                                settings=data.get("settings"), timestamp=timestamp())
+                                settings=data.get("settings"), timestamp=timestamp(),
+                                paid=data.get("paid"), started=data.get("started"))
         self.db.session.add(user)
         self.db.session.commit()
         return user
