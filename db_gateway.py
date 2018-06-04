@@ -32,6 +32,10 @@ class DB_GateWay:
                 first.password = data.get("password")
             if data.get("settings"):
                 first.settings = data.get("settings")
+            if data.get("paid"):
+                first.paid = data.get("paid")
+            if data.get("started"):
+                first.started = data.get("started")
             first.timestamp = timestamp()
             self.db.session.commit()
             return first
