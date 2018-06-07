@@ -6,13 +6,13 @@ from flask_sqlalchemy import SQLAlchemy
 from config import BaseConfig
 from db_gateway import DB_GateWay
 
-app = Flask(__name__)
-app.config.from_object(BaseConfig)
-db = SQLAlchemy(app)
+application = Flask(__name__)
+application.config.from_object(BaseConfig)
+db = SQLAlchemy(application)
 dbg = DB_GateWay(db)
 
 
-@app.route('/', methods=['GET'])
+@application.route('/', methods=['GET'])
 def get_root():
     try:
         user = request.args.get("user")
@@ -21,7 +21,7 @@ def get_root():
         return str(exc)
 
 
-@app.route('/', methods=['PUT'])
+@application.route('/', methods=['PUT'])
 def put_root():
     try:
         data = json.loads(request.data)
@@ -38,4 +38,4 @@ def put_root():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    application.run(host='0.0.0.0')

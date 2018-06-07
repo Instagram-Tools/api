@@ -1,9 +1,10 @@
 version: '3'
 services:
   api:
+    command: /usr/local/bin/gunicorn -w 2 -b :5000 server
     build: .
     ports:
-      - "8000:5000"
+      - "5000:5000"
     volumes:
       - .:/app
     restart: always
