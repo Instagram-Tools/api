@@ -18,7 +18,7 @@ def get_root():
         user = request.args.get("user")
         return dbg.get_user_data(user)
     except Exception as exc:
-        return str(exc)
+        return str(exc), 500
 
 
 @application.route('/', methods=['PUT'])
@@ -34,7 +34,7 @@ def put_root():
 
         return "updated %r" % user
     except Exception as exc:
-        return str(exc)
+        return str(exc), 500
 
 
 if __name__ == '__main__':
