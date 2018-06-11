@@ -18,7 +18,7 @@ dbg = DB_GateWay(application, db)
 def get_root():
     try:
         user = request.args.get("user")
-        return dbg.get_user_data(user)
+        return dbg.get_account_data(user)
     except Exception as exc:
         return str(exc), 500
 
@@ -31,7 +31,7 @@ def put_root():
         if len(data) <= 1:
             return "nothing to update"
 
-        user = dbg.update_user(data)
+        user = dbg.update_account(data)
         dbg.update_timetable(user, data)
 
         return "updated %r" % user

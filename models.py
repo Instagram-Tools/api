@@ -7,38 +7,51 @@ roles_users = db.Table('roles_users',
 
 
 class Role(db.Model, RoleMixin):
+    __tablename__ = 'role'
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
 
     def __repr__(self):
-        return '<Role %r>' % (self.name)
+        return '<Role %r>' % self.name
 
 
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(255), unique=True)
+    password = db.Column(db.String(255))
+    active = db.Column(db.Boolean())
+    confirmed_at = db.Column(db.DateTime())
+    roles = db.relationship('Role', secondary=roles_users,
+                            backref=db.backref('users', lazy='dynamic'))
+
+    def __repr__(self):
+        return '<User %r>' % self.email
+
+
+class Account(db.Model):
+    __tablename__ = 'account'
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
     settings = db.Column(db.Text(), nullable=False)
-    timetables = db.relationship('TimeTable', backref='user', lazy=True)
-    running = db.relationship('Running', backref='user', lazy=True)
+    timetables = db.relationship('TimeTable', backref='account', lazy=True)
+    running = db.relationship('Running', backref='account', lazy=True)
     timestamp = db.Column(db.TIMESTAMP, nullable=False)
     paid = db.Column(db.Boolean, default=False)
     started = db.Column(db.Boolean, default=True)
-    roles = db.relationship('Role', secondary=roles_users,
-                            backref=db.backref('users', lazy='dynamic'))
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<Account %r>' % self.username
 
 
 class TimeTable(db.Model):
     __tablename__ = 'timetable'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    account_id = db.Column(db.Integer, db.ForeignKey('account.id'), nullable=False)
     start = db.Column(db.DateTime(), nullable=False)
     end = db.Column(db.DateTime(), nullable=False)
 
@@ -53,7 +66,7 @@ class Running(db.Model):
     __tablename__ = 'running'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), unique=True, nullable=False)
+    account_id = db.Column(db.Integer, db.ForeignKey('account.id'), unique=True, nullable=False)
     start = db.Column(db.DateTime(), nullable=False)
     end = db.Column(db.DateTime(), nullable=False)
 
