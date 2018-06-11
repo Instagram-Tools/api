@@ -25,6 +25,7 @@ class User(db.Model, UserMixin):
     confirmed_at = db.Column(db.DateTime())
     roles = db.relationship('Role', secondary=roles_users,
                             backref=db.backref('users', lazy='dynamic'))
+    accounts = db.relationship('Account', backref='user', lazy=True)
 
     def __repr__(self):
         return '<User %r>' % self.email
@@ -42,6 +43,7 @@ class Account(db.Model):
     timestamp = db.Column(db.TIMESTAMP, nullable=False)
     paid = db.Column(db.Boolean, default=False)
     started = db.Column(db.Boolean, default=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
         return '<Account %r>' % self.username
