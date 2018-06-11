@@ -24,6 +24,7 @@ def get_root():
 
 
 @application.route('/', methods=['PUT'])
+@login_required
 def put_root():
     try:
         data = json.loads(request.data)
