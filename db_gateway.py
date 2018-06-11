@@ -1,16 +1,20 @@
 import json
 
 from flask import jsonify
+from flask_security import Security, SQLAlchemyUserDatastore
 
 from time_util import timestamp, parse_datetime
 
 
 class DB_GateWay:
 
-    def __init__(self, db):
+    def __init__(self, application, db):
         import models
         self.models = models
         self.db = db
+        # Setup Flask-Security
+        self.user_datastore = SQLAlchemyUserDatastore(db, models.User, models.Role)
+        self.security = Security(application, self.user_datastore)
 
     def get_user_data(self, user):
         first: self.models.User = self.models.User.query.filter_by(username=user).first()

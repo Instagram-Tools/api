@@ -1,7 +1,21 @@
 from server import db
+from flask_security import UserMixin, RoleMixin
+
+roles_users = db.Table('roles_users',
+                       db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
+                       db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
 
 
-class User(db.Model):
+class Role(db.Model, RoleMixin):
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(80), unique=True)
+    description = db.Column(db.String(255))
+
+    def __repr__(self):
+        return '<Role %r>' % (self.name)
+
+
+class User(db.Model, UserMixin):
     __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -13,6 +27,8 @@ class User(db.Model):
     timestamp = db.Column(db.TIMESTAMP, nullable=False)
     paid = db.Column(db.Boolean, default=False)
     started = db.Column(db.Boolean, default=True)
+    roles = db.relationship('Role', secondary=roles_users,
+                            backref=db.backref('users', lazy='dynamic'))
 
     def __repr__(self):
         return '<User %r>' % self.username
