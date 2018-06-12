@@ -20,6 +20,7 @@ def get_root():
         user = request.args.get("user")
         return dbg.get_account_data(user)
     except Exception as exc:
+        # 500 Internal Server Error
         return str(exc), 500
 
 
@@ -37,6 +38,7 @@ def put_root():
 
         return "updated %r" % user
     except Exception as exc:
+        # 500 Internal Server Error
         return str(exc), 500
 
 
