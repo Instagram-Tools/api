@@ -62,12 +62,12 @@ class DB_GateWay:
     def update_timetable(self, account, data):
         timetable = data.get("timetable")
         if timetable:
-            self.deleteTimeTables(account)
+            self.delete_timetables(account)
             for i in range(0, len(timetable), 2):
                 timetable = self.models.TimeTable(account_id=account.id, start=parse_datetime(timetable[i]),
                                                   end=parse_datetime(timetable[i + 1]))
                 self.db.session.add(timetable)
             self.db.session.commit()
 
-    def deleteTimeTables(self, account):
+    def delete_timetables(self, account):
         self.models.TimeTable.query.filter_by(account_id=account.id).delete()
