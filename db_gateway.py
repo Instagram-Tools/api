@@ -6,6 +6,10 @@ from flask_security import Security, SQLAlchemyUserDatastore
 from time_util import timestamp, parse_datetime
 
 
+def check_affiliation(account):
+    return str(account) in str(list(current_user.accounts))
+
+
 class DB_GateWay:
 
     def __init__(self, application, db):
@@ -18,7 +22,7 @@ class DB_GateWay:
 
     def get_account_data(self, username):
         first: self.models.Account = self.models.Account.query.filter_by(username=username).first()
-        if first:
+        if first and check_affiliation(first):
             class Encoder(json.JSONEncoder):
                 def default(self, o):
                     return o.to_json()
@@ -27,7 +31,8 @@ class DB_GateWay:
             return jsonify({"settings": first.settings, "timetables": tables,
                             "timestamp": str(first.timestamp)})
         else:
-            return jsonify({"settings": {}, "timetables": []})
+            # 403 Forbidden
+            return "That is not your Account", 403
 
     def update_account(self, data):
         first: self.models.Account = self.models.Account.query.filter_by(username=data.get("username")).first()
@@ -40,13 +45,16 @@ class DB_GateWay:
                 first.paid = data.get("paid")
             if data.get("started"):
                 first.started = data.get("started")
+            if data.get("user_id"):
+                first.started = data.get("user_id")
             first.timestamp = timestamp()
             self.db.session.commit()
             return first
 
         account = self.models.Account(username=data.get("username"), password=data.get("password"),
-                                settings=data.get("settings"), timestamp=timestamp(),
-                                paid=data.get("paid"), started=data.get("started"))
+                                      settings=data.get("settings"), timestamp=timestamp(),
+                                      paid=data.get("paid"), started=data.get("started"),
+                                      user_id=data.get("user_id"))
         self.db.session.add(account)
         self.db.session.commit()
         return account
