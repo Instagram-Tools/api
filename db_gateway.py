@@ -36,7 +36,7 @@ class DB_GateWay:
 
     def update_account(self, data):
         first: self.models.Account = self.models.Account.query.filter_by(username=data.get("username")).first()
-        if first:
+        if first and check_affiliation(first):
             if data.get("password"):
                 first.password = data.get("password")
             if data.get("settings"):
