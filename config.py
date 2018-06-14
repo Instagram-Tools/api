@@ -14,3 +14,4 @@ class BaseConfig(object):
         DB_USER, DB_PASS, DB_SERVICE, DB_PORT, DB_NAME
     )
     SECURITY_PASSWORD_SALT = os.environ['SECURITY_PASSWORD_SALT']
+    SECURITY_REGISTERABLE = True
