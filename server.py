@@ -4,7 +4,7 @@ from flask import Flask, request
 from flask_security import login_required
 from flask_sqlalchemy import SQLAlchemy
 
-from config import BaseConfig
+from config import BaseConfig, setup_mail
 from db_gateway import DB_GateWay
 
 application = Flask(__name__)
@@ -12,6 +12,7 @@ application.config.from_object(BaseConfig)
 db = SQLAlchemy(application)
 dbg = DB_GateWay(application, db)
 
+mail = setup_mail(application)
 
 @application.route('/', methods=['GET'])
 @login_required
