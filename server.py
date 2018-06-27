@@ -1,7 +1,6 @@
 import json
 
 from flask import Flask, request
-from flask_security import login_required
 from flask_sqlalchemy import SQLAlchemy
 
 from config import BaseConfig, setup_mail
@@ -15,7 +14,6 @@ dbg = DB_GateWay(application, db)
 mail = setup_mail(application)
 
 @application.route('/', methods=['GET'])
-@login_required
 def get_root():
     try:
         user = request.args.get("user")
@@ -26,7 +24,6 @@ def get_root():
 
 
 @application.route('/', methods=['PUT'])
-@login_required
 def put_root():
     try:
         data = json.loads(request.data)
