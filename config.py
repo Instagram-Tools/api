@@ -26,11 +26,11 @@ from flask_mail import Mail
 
 # After 'Create app'
 def setup_mail(app):
-    app.config['MAIL_SERVER'] = 'smtp.example.com'
-    app.config['MAIL_PORT'] = 465
-    app.config['MAIL_USE_SSL'] = True
-    app.config['MAIL_USERNAME'] = 'username'
-    app.config['MAIL_PASSWORD'] = 'password'
+    # app.config['MAIL_SERVER'] = 'smtp.example.com'
+    # app.config['MAIL_PORT'] = 465
+    # app.config['MAIL_USE_SSL'] = True
+    # app.config['MAIL_USERNAME'] = 'username'
+    # app.config['MAIL_PASSWORD'] = 'password'
     app.config['MAIL_DEBUG'] = 1 if app.debug else 0
     mail = Mail(app)
     return mail

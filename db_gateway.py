@@ -48,7 +48,7 @@ class DB_GateWay:
             if data.get("password"):
                 first.password = data.get("password")
             if data.get("settings"):
-                first.settings = data.get("settings")
+                first.settings = json.dumps(data.get("settings"))
             if data.get("paid"):
                 first.paid = data.get("paid")
             if data.get("started"):
