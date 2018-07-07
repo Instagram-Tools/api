@@ -2,6 +2,8 @@ import json
 
 from flask import jsonify
 from flask_security import Security, SQLAlchemyUserDatastore
+from flask_security.utils import hash_password
+from flask_security.core import current_user
 
 from time_util import timestamp, parse_datetime
 
@@ -19,6 +21,11 @@ class DB_GateWay:
         # Setup Flask-Security
         self.user_datastore = SQLAlchemyUserDatastore(db, models.User, models.Role)
         self.security = Security(application, self.user_datastore)
+
+    def register_user(self, data):
+        user = self.user_datastore.create_user(email=data.get("email"), password=hash_password(data.get("password")))
+        self.db.session.commit()
+        return user
 
     def get_account_data(self, username):
         first: self.models.Account = self.models.Account.query.filter_by(username=username).first()

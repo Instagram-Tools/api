@@ -39,6 +39,21 @@ def put_root():
         # 500 Internal Server Error
         return str(exc), 500
 
+@application.route('/reg', methods=['PUT'])
+def put_reg():
+    try:
+        data = json.loads(request.data)
+
+        if len(data) <= 1:
+            return "nothing to update"
+
+        user = dbg.register_user(data)
+
+        return "updated %r" % user
+    except Exception as exc:
+        # 500 Internal Server Error
+        return str(exc), 500
+
 
 if __name__ == '__main__':
     application.run(host='0.0.0.0')
