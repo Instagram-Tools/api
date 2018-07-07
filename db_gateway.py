@@ -42,6 +42,7 @@ class DB_GateWay:
             return "That is not your Account", 403
 
     def update_account(self, data):
+        user = self.find_user(data.get("email"))
         first: self.models.Account = self.models.Account.query.filter_by(username=data.get("username")).first()
         if first and check_affiliation(first):
             if data.get("password"):
@@ -61,10 +62,14 @@ class DB_GateWay:
         account = self.models.Account(username=data.get("username"), password=data.get("password"),
                                       settings=data.get("settings"), timestamp=timestamp(),
                                       paid=data.get("paid"), started=data.get("started"),
-                                      user_id=data.get("user_id"))
+                                      user_id=user.id)
         self.db.session.add(account)
         self.db.session.commit()
         return account
+
+    def find_user(self, email):
+        return self.models.User.query.filter_by(email=email).first
+
 
     def update_timetable(self, account, data):
         timetable = data.get("timetable")
