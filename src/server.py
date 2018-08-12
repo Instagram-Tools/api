@@ -13,6 +13,13 @@ dbg = DB_GateWay(application, db)
 
 mail = setup_mail(application)
 
+
+# Create a user to test with
+@application.before_first_request
+def create_user():
+    dbg.create_user()
+
+
 @application.route('/', methods=['GET'])
 def get_root():
     try:

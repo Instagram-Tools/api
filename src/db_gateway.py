@@ -14,6 +14,13 @@ def check_affiliation(account):
 
 class DB_GateWay:
 
+    def create_user(self):
+        self.db.drop_all()
+        self.db.create_all()
+        user = self.user_datastore.create_user(email='matt@nobien.net', password=hash_password('password'))
+        self.db.session.commit()
+        self.update_account({"email": user.email, "username": "u", "password": "p", "settings": "s"})
+
     def __init__(self, application, db):
         import models
         self.models = models
