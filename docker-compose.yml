@@ -7,7 +7,6 @@ services:
       - "5000:5000"
     volumes:
       - ./src:/app
-    restart: always
     depends_on:
       - postgres
     links:
