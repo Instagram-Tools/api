@@ -6,4 +6,4 @@ COPY ./src requirements.txt ./
 
 RUN pip install -r requirements.txt
 
-CMD /usr/local/bin/gunicorn -b :5000 server
+CMD /usr/local/bin/gunicorn -b :8000 server
