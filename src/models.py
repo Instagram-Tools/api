@@ -74,3 +74,7 @@ class Running(db.Model):
 
     def __repr__(self):
         return '<Running %r %r:%r>' % (self.user_id, str(self.start), str(self.end))
+
+
+def list():
+    return [Role, Account, User, TimeTable, Running]
