@@ -9,8 +9,8 @@ from time_util import timestamp, parse_datetime
 
 
 def check_affiliation(account):
-    return str(account) in str(list(current_user.accounts))
-
+    # return str(account) in str(list(current_user.accounts))
+    return True
 
 class DB_GateWay:
 
@@ -43,7 +43,7 @@ class DB_GateWay:
 
     def update_account(self, data):
         first: self.models.Account = self.models.Account.query.filter_by(username=data.get("username")).first()
-        if first: # and check_affiliation(first):
+        if first and check_affiliation(first):
             if data.get("password"):
                 first.password = data.get("password")
             if data.get("settings"):
