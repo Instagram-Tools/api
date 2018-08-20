@@ -6,12 +6,16 @@ from flask_sqlalchemy import SQLAlchemy
 from config import BaseConfig, setup_mail
 from db_gateway import DB_GateWay
 
+from flask_cors import CORS
+
 application = Flask(__name__)
 application.config.from_object(BaseConfig)
 db = SQLAlchemy(application)
 dbg = DB_GateWay(application, db)
 
 mail = setup_mail(application)
+
+CORS(application)
 
 @application.route('/', methods=['GET'])
 def get_root():
