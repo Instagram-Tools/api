@@ -12,6 +12,7 @@ def check_affiliation(account):
     # return str(account) in str(list(current_user.accounts))
     return True
 
+
 class DB_GateWay:
 
     def __init__(self, application, db):
@@ -70,15 +71,14 @@ class DB_GateWay:
     def find_user(self, email):
         return self.models.User.query.filter_by(email=email).first()
 
-
     def update_timetable(self, account, data):
         timetable = data.get("timetable")
         if timetable:
             self.delete_timetables(account)
             for i in range(0, len(timetable), 2):
-                timetable = self.models.TimeTable(account_id=account.id, start=parse_datetime(timetable[i]),
-                                                  end=parse_datetime(timetable[i + 1]))
-                self.db.session.add(timetable)
+                self.db.session.add(self.models.TimeTable(
+                    account_id=account.id, start=parse_datetime(timetable[i]),
+                    end=parse_datetime(timetable[i + 1])))
             self.db.session.commit()
 
     def delete_timetables(self, account):
