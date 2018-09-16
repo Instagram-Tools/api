@@ -8,16 +8,16 @@ from db_gateway import DB_GateWay
 
 from flask_cors import CORS
 
-application = Flask(__name__)
-application.config.from_object(BaseConfig)
-db = SQLAlchemy(application)
-dbg = DB_GateWay(application, db)
+app = Flask(__name__)
+app.config.from_object(BaseConfig)
+db = SQLAlchemy(app)
+dbg = DB_GateWay(app, db)
 
-mail = setup_mail(application)
+mail = setup_mail(app)
 
-CORS(application)
+CORS(app)
 
-@application.route('/', methods=['GET'])
+@app.route('/', methods=['GET'])
 def get_root():
     try:
         user = request.args.get("user")
@@ -27,7 +27,7 @@ def get_root():
         return str(exc), 500
 
 
-@application.route('/', methods=['PUT'])
+@app.route('/', methods=['PUT'])
 def put_root():
     try:
         data = json.loads(request.data)
@@ -43,7 +43,7 @@ def put_root():
         # 500 Internal Server Error
         return str(exc), 500
 
-@application.route('/reg', methods=['PUT'])
+@app.route('/reg', methods=['PUT'])
 def put_reg():
     try:
         data = json.loads(request.data)
@@ -59,7 +59,7 @@ def put_reg():
         return str(exc), 500
 
 
-@application.before_first_request
+@app.before_first_request
 def initDB():
     import models
 
@@ -77,4 +77,4 @@ def initDB():
 
 if __name__ == '__main__':
     initDB()
-    application.run(host='0.0.0.0')
+    app.run(host='0.0.0.0')
