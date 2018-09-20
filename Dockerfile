@@ -7,4 +7,4 @@ COPY ./src requirements.txt ./
 RUN pip install -r requirements.txt
 
 EXPOSE 8000
-CMD /usr/local/bin/gunicorn -b :8000 server:app
+CMD python create_db.py && /usr/local/bin/gunicorn -b :8000 server:app
