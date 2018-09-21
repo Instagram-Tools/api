@@ -58,23 +58,5 @@ def put_reg():
         # 500 Internal Server Error
         return str(exc), 500
 
-
-@app.before_first_request
-def initDB():
-    import models
-
-    try:
-        for m in models.list():
-            print(str(m))
-            print(str(m.query.filter_by(id=1).first()))
-    except:
-        print("sqlalchemy.exc.ProgrammingError")
-        print("initDB now!")
-        import create_db
-        create_db
-        print("initDB DONE")
-
-
 if __name__ == '__main__':
-    initDB()
     app.run(host='0.0.0.0')
