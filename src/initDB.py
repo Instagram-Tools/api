@@ -1,4 +1,5 @@
-from server import models
+from server import database
+models = database.models
 from time import sleep
 
 time = 10
