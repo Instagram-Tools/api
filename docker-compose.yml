@@ -1,6 +1,7 @@
 version: '3'
 services:
   api:
+    command: sh dev.sh
     build: .
     image: instagramtools/api
     ports:
