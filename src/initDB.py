@@ -25,6 +25,4 @@ def init():
         create_db
         print("initDB DONE")
 
-
-s(30)
 init()
