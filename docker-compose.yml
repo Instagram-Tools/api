@@ -13,6 +13,8 @@ services:
     links:
       - postgres:postgres
     environment:
+      - FLASK_ENV=development
+      - FLASK_APP=server
       - DEBUG=True
       - SECRET_KEY=5(15ds+i2+%ik6z&!yer+ga9m=e%jcqiz_5wszg)r-z!2--b2d
       - DB_NAME=postgres
