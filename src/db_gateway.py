@@ -12,8 +12,9 @@ def check_affiliation(account):
 
 
 class DB_GateWay:
-    def __init__(self, db):
+    def __init__(self, db,log):
         # type: (database) -> DB_GateWay
+        self.logger = log
         self.db = db.db
         self.user_datastore = db.user_datastore
         self.security = db.security

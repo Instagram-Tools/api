@@ -12,7 +12,7 @@ app.config.from_object(BaseConfig)
 
 database = database.DB(app)
 db = database.db
-dbg = DB_GateWay(database)
+dbg = DB_GateWay(database, app.logger)
 
 mail = setup_mail(app)
 
