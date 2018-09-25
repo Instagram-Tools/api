@@ -25,7 +25,7 @@ class DB_GateWay:
         return user
 
     def get_account_data(self, username):
-        first: self.models.Account = self.find_account(data.get("username"))
+        first: self.models.Account = self.find_account(username)
         if first and check_affiliation(first):
             class Encoder(json.JSONEncoder):
                 def default(self, o):
