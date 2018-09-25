@@ -56,7 +56,7 @@ def put_reg():
 
         user = dbg.register_user(data)
 
-        return "updated %r" % user
+        return "created %r" % user
     except Exception as exc:
         # 500 Internal Server Error
         return str(exc), 500
