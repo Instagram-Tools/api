@@ -23,7 +23,10 @@ CORS(app)
 def get_root():
     try:
         user = request.args.get("user")
-        return dbg.get_account_data(user)
+        if user:
+            return dbg.get_account_data(user)
+        else:
+            return "ping", 200
     except Exception as exc:
         # 500 Internal Server Error
         return str(exc), 500
