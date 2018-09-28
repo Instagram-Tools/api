@@ -26,4 +26,4 @@ RUN apk add --no-cache --virtual .build-deps \
 COPY ./src .
 
 EXPOSE 8000
-CMD sh start.sh 8000
+CMD ./start.sh 8000
