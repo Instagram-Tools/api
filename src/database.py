@@ -51,6 +51,7 @@ class DB:
                 paid = db.Column(db.Boolean, default=False)
                 started = db.Column(db.Boolean, default=True)
                 user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+                discount_code_id = db.Column(db.Integer, db.ForeignKey('discount_code.id'))
 
                 def __repr__(self):
                     return '<Account %r>' % self.username
@@ -79,6 +80,14 @@ class DB:
 
                 def __repr__(self):
                     return '<Running %r %r:%r>' % (self.account_id, str(self.start), str(self.end))
+
+            class DiscountCode(db.Model):
+                __tablename__ = 'discount_code'
+
+                id = db.Column(db.Integer, primary_key=True)
+                code = db.Column(db.String, unique=True, nullable=False)
+                discount = db.Column(db.Integer, nullable=False)
+                active = db.Column(db.Boolean(), default=False)
 
             @staticmethod
             def list():
