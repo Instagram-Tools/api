@@ -95,7 +95,7 @@ class DB:
 
             @staticmethod
             def list():
-                return [models.Role, models.Account, models.User, models.TimeTable, models.Running]
+                return [models.Role, models.Account, models.User, models.TimeTable, models.Running, models.DiscountCode]
 
         user_datastore = SQLAlchemyUserDatastore(db, models.User, models.Role)
         security = Security(app, user_datastore)
