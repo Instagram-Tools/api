@@ -36,6 +36,9 @@ class DB:
                 accounts = db.relationship('Account', backref='user', lazy=True)
                 discount_code_id = db.Column(db.Integer, db.ForeignKey('discount_code.id'))
 
+                parent_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+                affiliates = db.relationship("User")
+
                 def __repr__(self):
                     return '<User %r>' % self.email
 
