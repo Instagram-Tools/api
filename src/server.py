@@ -4,13 +4,13 @@ from flask import request
 from flask_cors import CORS
 
 from config import BaseConfig, setup_mail
-from db_gateway import DB_GateWay, database
+from db_gateway import DB_GateWay, db
 
 # Create app
 app = Flask(__name__)
 app.config.from_object(BaseConfig)
 
-database = database.DB(app)
+database = db.DB(app)
 db = database.db
 dbg = DB_GateWay(database)
 
