@@ -2,7 +2,7 @@ import json
 from flask import jsonify
 from flask_security.utils import hash_password
 
-import database
+import database as db
 from time_util import timestamp, parse_datetime
 
 
@@ -12,12 +12,12 @@ def check_affiliation(account):
 
 
 class DB_GateWay:
-    def __init__(self, db):
-        # type: (database) -> DB_GateWay
-        self.db = db.db
-        self.user_datastore = db.user_datastore
-        self.security = db.security
-        self.models = db.models
+    def __init__(self, database):
+        # type: (db) -> DB_GateWay
+        self.db = database.db
+        self.user_datastore = database.user_datastore
+        self.security = database.security
+        self.models = database.models
 
     def register_user(self, data):
         user = self.user_datastore.create_user(email=data.get("email"), password=hash_password(data.get("password")))
