@@ -65,5 +65,12 @@ def put_reg():
         return str(exc), 500
 
 
+@app.before_first_request
+def init_discount_codes():
+    code = database.models.DiscountCode(code="CASHBACK30", discount=20, active=True)
+    db.session.add(code)
+    db.session.commit()
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=8000)
