@@ -45,8 +45,6 @@ class DB_GateWay:
                 first.password = data.get("password")
             if data.get("settings"):
                 first.settings = json.dumps(data.get("settings"))
-            if data.get("paid"):
-                first.paid = data.get("paid")
             if data.get("started"):
                 first.started = data.get("started")
             if data.get("user_id"):
@@ -58,8 +56,7 @@ class DB_GateWay:
         user: self.models.User = self.find_user(data.get("email"))
         account = self.models.Account(username=data.get("username"), password=data.get("password"),
                                       settings=data.get("settings"), timestamp=timestamp(),
-                                      paid=data.get("paid"), started=data.get("started"),
-                                      user_id=user.id)
+                                      started=data.get("started"), user_id=user.id)
         self.db.session.add(account)
         self.db.session.commit()
         return account

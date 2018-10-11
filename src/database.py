@@ -39,6 +39,7 @@ class DB:
                 parent_id = db.Column(db.Integer, db.ForeignKey('user.id'))
                 affiliates = db.relationship("User")
 
+
                 def __repr__(self):
                     return '<User %r>' % self.email
 
@@ -52,7 +53,6 @@ class DB:
                 timetables = db.relationship('TimeTable', backref='account', lazy=True)
                 running = db.relationship('Running', backref='account', lazy=True)
                 timestamp = db.Column(db.TIMESTAMP, nullable=False)
-                paid = db.Column(db.Boolean, default=False)
                 started = db.Column(db.Boolean, default=True)
                 user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
                 credit = db.Column(db.Integer, default=0)
