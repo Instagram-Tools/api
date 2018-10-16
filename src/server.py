@@ -19,7 +19,7 @@ mail = setup_mail(app)
 CORS(app)
 
 
-@app.route('/', methods=['GET'])
+@app.route('/api/', methods=['GET'])
 def get_root():
     try:
         user = request.args.get("user")
@@ -32,7 +32,7 @@ def get_root():
         return str(exc), 500
 
 
-@app.route('/', methods=['PUT'])
+@app.route('/api/', methods=['PUT'])
 def put_root():
     try:
         data = json.loads(request.data)
@@ -49,7 +49,7 @@ def put_root():
         return str(exc), 500
 
 
-@app.route('/reg', methods=['PUT'])
+@app.route('/api/reg', methods=['PUT'])
 def put_reg():
     try:
         data = json.loads(request.data)
