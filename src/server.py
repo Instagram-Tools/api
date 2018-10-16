@@ -67,10 +67,13 @@ def put_reg():
 
 @app.before_first_request
 def init_discount_codes():
-    code = database.models.DiscountCode(code="CASHBACK30", discount=20, active=True)
-    db.session.add(code)
-    db.session.commit()
-
+    try:
+        code = database.models.DiscountCode(code="CASHBACK30", discount=20, active=True)
+        db.session.add(code)
+        db.session.commit()
+    except Exception as exc:
+        print("Exception while init_discount_codes():")
+        print(exc)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=8000)
