@@ -49,7 +49,7 @@ def put_root():
         return str(exc), 500
 
 
-@app.route('/api/reg', methods=['PUT'])
+@app.route('/api/reg/', methods=['PUT'])
 def put_reg():
     try:
         data = json.loads(request.data)
