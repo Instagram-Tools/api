@@ -34,11 +34,9 @@ class DB:
                                                                      db.ForeignKey('role.id'))),
                                         backref=db.backref('users', lazy='dynamic'))
                 accounts = db.relationship('Account', backref='user', lazy=True)
-                discount_code_id = db.Column(db.Integer, db.ForeignKey('discount_code.id'))
 
                 parent_id = db.Column(db.Integer, db.ForeignKey('user.id'))
                 affiliates = db.relationship("User")
-
 
                 def __repr__(self):
                     return '<User %r>' % self.email
@@ -85,17 +83,9 @@ class DB:
                 def __repr__(self):
                     return '<Running %r %r:%r>' % (self.account_id, str(self.start), str(self.end))
 
-            class DiscountCode(db.Model):
-                __tablename__ = 'discount_code'
-
-                id = db.Column(db.Integer, primary_key=True)
-                code = db.Column(db.String, unique=True, nullable=False)
-                discount = db.Column(db.Integer, nullable=False)
-                active = db.Column(db.Boolean(), default=False)
-
             @staticmethod
             def list():
-                return [models.Role, models.Account, models.User, models.TimeTable, models.Running, models.DiscountCode]
+                return [models.Role, models.Account, models.User, models.TimeTable, models.Running]
 
         user_datastore = SQLAlchemyUserDatastore(db, models.User, models.Role)
         security = Security(app, user_datastore)
