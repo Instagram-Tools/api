@@ -54,6 +54,7 @@ class DB:
                 started = db.Column(db.Boolean, default=True)
                 user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
                 credit = db.Column(db.Integer, default=0)
+                paid = db.Column(db.Boolean(), default=False)
 
                 def __repr__(self):
                     return '<Account %r>' % self.username
