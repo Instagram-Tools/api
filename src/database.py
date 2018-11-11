@@ -54,6 +54,8 @@ class DB:
                 started = db.Column(db.Boolean, default=True)
                 user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
                 credit = db.Column(db.Integer, default=0)
+
+                subscription = db.Column(db.String(10), nullable=False, unique=True)
                 paid = db.Column(db.Boolean, default=False)
 
                 def __repr__(self):
