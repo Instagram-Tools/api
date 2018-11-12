@@ -18,6 +18,9 @@ mail = setup_mail(app)
 
 CORS(app)
 
+@app.route('/', methods=['GET'])
+def ping():
+    return "ping", 200
 
 @app.route('/api/', methods=['GET'])
 def get_root():
