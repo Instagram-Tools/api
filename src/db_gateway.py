@@ -56,7 +56,8 @@ class DB_GateWay:
         user: self.models.User = self.find_user(data.get("email"))
         account = self.models.Account(username=data.get("username"), password=data.get("password"),
                                       settings=data.get("settings"), timestamp=timestamp(),
-                                      started=data.get("started"), user_id=user.id)
+                                      started=data.get("started"), user_id=user.id,
+                                      subscription=data.get("subscription"), paid=True)  # TODO set paid via pay-manager
         self.db.session.add(account)
         self.db.session.commit()
         return account
