@@ -25,7 +25,11 @@ class DB_GateWay:
         return user
 
     def verify_user(self, email, password):
-        return self.find_user(email).password == hash_password(password)
+        user = self.find_user(email)
+        if user:
+            return user.password == hash_password(password)
+        else:
+            return None
 
     def get_account_data(self, username):
         first: self.models.Account = self.find_account(username)
