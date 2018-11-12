@@ -24,6 +24,9 @@ class DB_GateWay:
         self.db.session.commit()
         return user
 
+    def verify_user(self, email, password):
+        return self.find_user(email).password == hash_password(password)
+
     def get_account_data(self, username):
         first: self.models.Account = self.find_account(username)
         if first and check_affiliation(first):

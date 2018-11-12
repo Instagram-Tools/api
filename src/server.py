@@ -22,9 +22,14 @@ CORS(app)
 @app.route('/api/', methods=['GET'])
 def get_root():
     try:
-        user = request.args.get("user")
-        if user:
-            return dbg.get_account_data(user)
+        email = request.args.get("email")
+        e_password = request.args.get("e_password")
+        if not dbg.verify_user(email=email, password=e_password):
+            return "Wrong Credentials", 500
+
+        username = request.args.get("username")
+        if username:
+            return dbg.get_account_data(username)
         else:
             return "ping", 200
     except Exception as exc:
