@@ -57,8 +57,8 @@ def put_root():
         return str(exc), 500
 
 
-@app.route('/api/reg/', methods=['PUT'])
-def put_reg():
+@app.route('/api/register/', methods=['PUT'])
+def register():
     try:
         data = json.loads(request.data)
 
