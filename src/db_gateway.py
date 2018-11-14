@@ -3,7 +3,7 @@ from flask import jsonify
 from werkzeug.security import generate_password_hash
 
 import database as db
-from time_util import timestamp, parse_datetime
+from time_util import timestamp, parse_datetime,decode_datetime
 
 
 def check_affiliation(account):
@@ -34,11 +34,7 @@ class DB_GateWay:
     def get_account_data(self, username):
         first: self.models.Account = self.find_account(username)
         if first and check_affiliation(first):
-            class Encoder(json.JSONEncoder):
-                def default(self, o):
-                    return o.to_json()
-
-            tables = json.dumps(first.timetables, cls=Encoder)
+            tables = self.decode_timetable(first.timetables)
             return jsonify({"password": first.password,"username": first.username,
                             "subscription": first.subscription,
                             "settings": first.settings, "timetable": tables,
@@ -86,6 +82,13 @@ class DB_GateWay:
                     account_id=account.id, start=parse_datetime(timetable[i]),
                     end=parse_datetime(timetable[i + 1])))
             self.db.session.commit()
+
+    def decode_timetable(self, timetables):
+        decoded = []
+        for t in timetables:
+            decoded += [(decode_datetime(t.start)), (decode_datetime(t.end))]
+        return decoded
+
 
     def delete_timetables(self, account):
         self.models.TimeTable.query.filter_by(account_id=account.id).delete()
