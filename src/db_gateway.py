@@ -39,7 +39,7 @@ class DB_GateWay:
                     return o.to_json()
 
             tables = json.dumps(first.timetables, cls=Encoder)
-            return jsonify({"settings": first.settings, "timetables": tables,
+            return jsonify({"settings": first.settings, "timetable": tables,
                             "timestamp": str(first.timestamp)})
         else:
             # 403 Forbidden
