@@ -1,6 +1,6 @@
 import json
 from flask import jsonify
-from flask_security.utils import hash_password
+from werkzeug.security import generate_password_hash
 
 import database as db
 from time_util import timestamp, parse_datetime
@@ -20,14 +20,14 @@ class DB_GateWay:
         self.models = database.models
 
     def register_user(self, data):
-        user = self.user_datastore.create_user(email=data.get("email"), password=hash_password(data.get("password")))
+        user = self.user_datastore.create_user(email=data.get("email"), password=generate_password_hash(data.get("password")))
         self.db.session.commit()
         return user
 
     def verify_user(self, email, password):
         user = self.find_user(email)
-        if user:
-            return user.password == hash_password(password)
+        if user and user.check_password(password):
+            return user
         else:
             return None
 

@@ -25,18 +25,21 @@ def ping():
 @app.route('/api/', methods=['GET'])
 def get_root():
     try:
+        app.logger.warning(request.args)
         email = request.args.get("email")
         e_password = request.args.get("e_password")
-        if not dbg.verify_user(email=email, password=e_password):
-            return "Wrong Credentials", 500
-
-        username = request.args.get("username")
-        if username:
+        user = dbg.verify_user(email=email, password=e_password)
+        if user:
+            username = request.args.get('username')
+            if not (username and len(str(username)) > 0):
+                username = user.accounts[0].username
             return dbg.get_account_data(username)
         else:
-            return "ping", 200
+            return "Wrong Credentials", 403
+
     except Exception as exc:
         # 500 Internal Server Error
+        app.logger.warning("GET /api/ %s" % exc)
         return str(exc), 500
 
 
@@ -44,6 +47,7 @@ def get_root():
 def put_root():
     try:
         data = json.loads(request.data)
+        app.logger.warning("PUT /api/ %s" % data)
 
         if len(data) <= 1:
             return "nothing to update"
@@ -61,6 +65,7 @@ def put_root():
 def register():
     try:
         data = json.loads(request.data)
+        app.logger.warning("/api/register/", data)
 
         if len(data) <= 1:
             return "nothing to update"
