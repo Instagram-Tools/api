@@ -25,15 +25,19 @@ def ping():
 @app.route('/api/', methods=['GET'])
 def get_root():
     try:
-        app.logger.warning(request.args)
+        app.logger.warning("GET /api %s" % request.args)
         email = request.args.get("email")
         e_password = request.args.get("e_password")
         user = dbg.verify_user(email=email, password=e_password)
+        app.logger.warning("GET /api user: %s" % user)
         if user:
             username = request.args.get('username')
             if not (username and len(str(username)) > 0):
                 username = user.accounts[0].username
-            return dbg.get_account_data(username)
+            app.logger.warning("GET /api username: %s" % username)
+            result = dbg.get_account_data(username)
+            app.logger.warning("GET /api result: %s" % result)
+            return result
         else:
             return "Wrong Credentials", 403
 
