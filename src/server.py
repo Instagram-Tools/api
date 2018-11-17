@@ -3,17 +3,24 @@ from flask import Flask
 from flask import request
 from flask import jsonify
 from flask_cors import CORS
+from sqlalchemy.dialects.postgresql import psycopg2
 
 from config import BaseConfig, setup_mail
-from db_gateway import DB_GateWay, db
+from db_gateway import DB_GateWay, database_db
 
 # Create app
 app = Flask(__name__)
 app.config.from_object(BaseConfig)
 
-database = db.DB(app)
-db = database.db
-dbg = DB_GateWay(database)
+
+def init_db_gateway():
+    global database, db, dbg
+    database = database_db.DB(app)
+    db = database.db
+    dbg = DB_GateWay(database)
+
+
+init_db_gateway()
 
 mail = setup_mail(app)
 
@@ -46,9 +53,13 @@ def get_root():
         else:
             return "Wrong Credentials", 403
 
+    except psycopg2.OperationalError as oe:
+        app.logger.error("GET /api/ %s" % oe)
+        init_db_gateway()
+
     except Exception as exc:
         # 500 Internal Server Error
-        app.logger.warning("GET /api/ %s" % exc)
+        app.logger.error("GET /api/ %s" % exc)
         return str(exc), 500
 
 
@@ -65,8 +76,14 @@ def put_root():
         dbg.update_timetable(user, data)
 
         return "updated %r" % user
+
+    except psycopg2.OperationalError as oe:
+        app.logger.error("GET /api/ %s" % oe)
+        init_db_gateway()
+
     except Exception as exc:
         # 500 Internal Server Error
+        app.logger.error("PUT /api/ %s" % exc)
         return str(exc), 500
 
 
@@ -82,8 +99,14 @@ def register():
         user = dbg.register_user(data)
 
         return "created %r" % user
+
+    except psycopg2.OperationalError as oe:
+        app.logger.error("GET /api/ %s" % oe)
+        init_db_gateway()
+
     except Exception as exc:
         # 500 Internal Server Error
+        app.logger.error("PUT /api/register/ %s" % exc)
         return str(exc), 500
 
 if __name__ == '__main__':

@@ -2,7 +2,7 @@ import json
 from flask import jsonify
 from werkzeug.security import generate_password_hash
 
-import database as db
+import database as database_db
 from time_util import timestamp, parse_datetime,decode_datetime
 
 
