@@ -1,6 +1,7 @@
 import json
 from flask import Flask
 from flask import request
+from flask import jsonify
 from flask_cors import CORS
 
 from config import BaseConfig, setup_mail
@@ -33,9 +34,13 @@ def get_root():
         if user:
             username = request.args.get('username')
             if not (username and len(str(username)) > 0):
-                username = user.accounts[0].username
-            app.logger.warning("GET /api username: %s" % username)
-            result = dbg.get_account_data(username)
+                if len(user.accounts) > 0:
+                    username = user.accounts[0].username
+                    app.logger.warning("GET /api username: %s" % username)
+                    result = dbg.get_account_data(username)
+                else:
+                    app.logger.warning("GET /api There is no Account owned by %s" % user)
+                    result = jsonify({})
             app.logger.warning("GET /api result: %s" % result)
             return result
         else:
