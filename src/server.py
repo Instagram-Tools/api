@@ -56,6 +56,7 @@ def get_root():
     except psycopg2.OperationalError as oe:
         app.logger.error("GET /api/ %s" % oe)
         init_db_gateway()
+        get_root()
 
     except Exception as exc:
         # 500 Internal Server Error
@@ -80,6 +81,7 @@ def put_root():
     except psycopg2.OperationalError as oe:
         app.logger.error("GET /api/ %s" % oe)
         init_db_gateway()
+        put_root()
 
     except Exception as exc:
         # 500 Internal Server Error
@@ -103,6 +105,7 @@ def register():
     except psycopg2.OperationalError as oe:
         app.logger.error("PUT /api/ %s" % oe)
         init_db_gateway()
+        register()
 
     except Exception as exc:
         # 500 Internal Server Error
