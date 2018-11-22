@@ -101,7 +101,7 @@ def register():
         return "created %r" % user
 
     except psycopg2.OperationalError as oe:
-        app.logger.error("GET /api/ %s" % oe)
+        app.logger.error("PUT /api/ %s" % oe)
         init_db_gateway()
 
     except Exception as exc:
