@@ -92,3 +92,9 @@ class DB_GateWay:
 
     def delete_timetables(self, account):
         self.models.TimeTable.query.filter_by(account_id=account.id).delete()
+
+    def get_bot_activity(self):
+        return 404
+
+    def add_bot_activity(self):
+        return 404

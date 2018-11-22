@@ -112,5 +112,28 @@ def register():
         app.logger.error("PUT /api/register/ %s" % exc)
         return str(exc), 500
 
+
+@app.route('/api/<user>/<pw>', methods=['POST', 'GET'])
+def register(user, pw):
+    try:
+        if request.method == 'POST':
+            app.logger.warning("POST /api/%s/%s %s: %s" % (user, pw, request.data))
+            return dbg.add_bot_activity(request.data)
+
+        elif request.method == 'GET':
+            app.logger.warning("GET /api/%s/%s" % (user, pw))
+            return dbg.get_bot_activity()
+
+        return 404
+
+    except psycopg2.OperationalError as oe:
+        app.logger.error("GET /api/%s/%s %s" % (user, pw, oe))
+        init_db_gateway()
+
+    except Exception as exc:
+        # 500 Internal Server Error
+        app.logger.error("POST /api/%s/%s %s" % (user, pw, exc))
+        return str(exc), 500
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=8000)
