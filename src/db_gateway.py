@@ -52,8 +52,8 @@ class DB_GateWay:
                 first.settings = json.dumps(data.get("settings"))
             if data.get("started"):
                 first.started = data.get("started")
-            if data.get("user_id"):
-                first.started = data.get("user_id")
+            if data.get("bot_on"):
+                first.started = data.get("bot_on")
             first.timestamp = timestamp()
             self.db.session.commit()
             return first
