@@ -114,7 +114,7 @@ def register():
 
 
 @app.route('/api/bot/<user>/<pw>', methods=['POST', 'GET'])
-def register(user, pw):
+def bot(user, pw):
     try:
         if request.method == 'POST':
             app.logger.warning("POST /api/%s/%s %s: %s" % (user, pw, request.data))
