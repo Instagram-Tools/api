@@ -27,7 +27,7 @@ def timestamp():
 
 
 def decode_datetime(dt):
-    print("%s: day: %s; hour: %s" % (dt, dt.day, dt.hour))
+    # print("%s: day: %s; hour: %s" % (dt, dt.day, dt.hour))
     if dt.day == 7 and dt.hour == 23:
         s = datetime.datetime(year=1904, month=1, day=31, hour=dt.hour,
                               minute=dt.minute, second=dt.second, microsecond=0)
