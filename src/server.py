@@ -1,9 +1,9 @@
 import json
 from flask import Flask
-from flask import request
 from flask import jsonify
+from flask import request
 from flask_cors import CORS
-from sqlalchemy.dialects.postgresql import psycopg2
+from sqlalchemy.exc import OperationalError
 
 from config import BaseConfig, setup_mail
 from db_gateway import DB_GateWay, database_db
@@ -53,7 +53,7 @@ def get_root():
         else:
             return "Wrong Credentials", 403
 
-    except psycopg2.OperationalError as oe:
+    except OperationalError as oe:
         app.logger.error("GET /api/ %s" % oe)
         init_db_gateway()
         get_root()
@@ -78,7 +78,7 @@ def put_root():
 
         return "updated %r" % user
 
-    except psycopg2.OperationalError as oe:
+    except OperationalError as oe:
         app.logger.error("GET /api/ %s" % oe)
         init_db_gateway()
         put_root()
@@ -102,7 +102,7 @@ def register():
 
         return "created %r" % user
 
-    except psycopg2.OperationalError as oe:
+    except OperationalError as oe:
         app.logger.error("PUT /api/ %s" % oe)
         init_db_gateway()
         register()
@@ -126,7 +126,7 @@ def bot(user, pw):
 
         return 404
 
-    except psycopg2.OperationalError as oe:
+    except OperationalError as oe:
         app.logger.error("GET /api/%s/%s %s" % (user, pw, oe))
         init_db_gateway()
 
