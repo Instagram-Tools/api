@@ -1,26 +1,13 @@
 import json
-from flask import Flask
 from flask import jsonify
 from flask import request
 from flask_cors import CORS
 from sqlalchemy.exc import OperationalError
 
-from config import BaseConfig, setup_mail
-from db_gateway import DB_GateWay, database_db
+from config import setup_mail
 
-# Create app
-app = Flask(__name__)
-app.config.from_object(BaseConfig)
+from settings import dbg, app
 
-
-def init_db_gateway():
-    global database, db, dbg
-    database = database_db.DB(app)
-    db = database.db
-    dbg = DB_GateWay(database)
-
-
-init_db_gateway()
 
 mail = setup_mail(app)
 
@@ -55,7 +42,6 @@ def get_root():
 
     except OperationalError as oe:
         app.logger.error("GET /api/ %s" % oe)
-        init_db_gateway()
         get_root()
 
     except Exception as exc:
@@ -80,7 +66,6 @@ def put_root():
 
     except OperationalError as oe:
         app.logger.error("GET /api/ %s" % oe)
-        init_db_gateway()
         put_root()
 
     except Exception as exc:
@@ -93,7 +78,7 @@ def put_root():
 def register():
     try:
         data = json.loads(request.data)
-        app.logger.warning("/api/register/", data)
+        app.logger.warning("PUT /api/register/ %s" % data)
 
         if len(data) <= 1:
             return "nothing to update"
@@ -104,7 +89,6 @@ def register():
 
     except OperationalError as oe:
         app.logger.error("PUT /api/ %s" % oe)
-        init_db_gateway()
         register()
 
     except Exception as exc:
@@ -128,7 +112,6 @@ def bot(user, pw):
 
     except OperationalError as oe:
         app.logger.error("GET /api/%s/%s %s" % (user, pw, oe))
-        init_db_gateway()
 
     except Exception as exc:
         # 500 Internal Server Error
