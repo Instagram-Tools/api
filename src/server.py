@@ -26,8 +26,7 @@ def get_root():
         username = request.args.get('username')
         account = dbg.get_account(email=email, password=e_password, username=username)
         if account:
-            app.logger.warning("GET /api return account: %s" % account)
-            return jsonify(account), 200
+            return account, 200
         else:
             app.logger.warning("GET /api no Account for: %s" % email)
             return "Wrong Credentials", 403
