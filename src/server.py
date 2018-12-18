@@ -23,21 +23,13 @@ def get_root():
         app.logger.warning("GET /api %s" % request.args)
         email = request.args.get("email")
         e_password = request.args.get("e_password")
-        user = dbg.verify_user(email=email, password=e_password)
-        app.logger.warning("GET /api user: %s" % user)
-        if user:
-            username = request.args.get('username')
-            if not (username and len(str(username)) > 0):
-                if len(user.accounts) > 0:
-                    username = user.accounts[0].username
-                    app.logger.warning("GET /api username: %s" % username)
-                    result = dbg.get_account_data(username)
-                else:
-                    app.logger.warning("GET /api There is no Account owned by %s" % user)
-                    result = jsonify({})
-            app.logger.warning("GET /api result: %s" % result)
-            return result
+        username = request.args.get('username')
+        account = dbg.get_account(email=email, password=e_password, username=username)
+        if account:
+            app.logger.warning("GET /api return account: %s" % account)
+            return jsonify(account), 200
         else:
+            app.logger.warning("GET /api no Account for: %s" % email)
             return "Wrong Credentials", 403
 
     except OperationalError as oe:

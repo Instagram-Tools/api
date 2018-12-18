@@ -2,7 +2,6 @@ import json
 from flask import jsonify
 from werkzeug.security import generate_password_hash
 
-import database as database_db
 from time_util import timestamp, parse_datetime,decode_datetime
 
 
@@ -12,8 +11,8 @@ def check_affiliation(account):
 
 
 class DB_GateWay:
-    def __init__(self, database):
-        # type: (db) -> DB_GateWay
+    def __init__(self, database, logger):
+        self.logger = logger
         self.db = database.db
         self.user_datastore = database.user_datastore
         self.security = database.security
@@ -42,6 +41,20 @@ class DB_GateWay:
         else:
             # 403 Forbidden
             return "That is not your Account", 403
+
+    def get_account(self, email, password, username):
+        user = self.verify_user(email=email, password=password)
+        if not (username and len(str(username)) > 0):
+            if user and len(user.accounts) > 0:
+                username = user.accounts[0].username
+                self.logger.warning("GET /api username: %s" % username)
+            else:
+                self.logger.warning("There is no Account owned by %s" % user)
+                return None
+
+        result = self.get_account_data(username)
+        self.logger.warning("GET /api result: %s" % result)
+        return result
 
     def update_account(self, data):
         first: self.models.Account = self.find_account(data.get("username"))
