@@ -34,10 +34,10 @@ class DB_GateWay:
         first: self.models.Account = self.find_account(username)
         if first and check_affiliation(first):
             tables = self.decode_timetable(first.timetables)
-            return jsonify({"password": first.password,"username": first.username,
+            return {"password": first.password, "username": first.username,
                             "subscription": first.subscription,
                             "settings": first.settings, "timetable": tables,
-                            "timestamp": str(first.timestamp)})
+                    "timestamp": str(first.timestamp)}
         else:
             # 403 Forbidden
             return "That is not your Account", 403
@@ -54,7 +54,7 @@ class DB_GateWay:
 
         result = self.get_account_data(username)
         self.logger.warning("GET /api result: %s" % result)
-        return result
+        return jsonify(result)
 
     def update_account(self, data):
         first: self.models.Account = self.find_account(data.get("username"))
