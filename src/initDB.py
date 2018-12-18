@@ -1,6 +1,6 @@
 from sqlalchemy.exc import OperationalError
 
-from server import database
+from settings import database
 models = database.models
 from time import sleep
 

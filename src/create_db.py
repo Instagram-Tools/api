@@ -1,4 +1,4 @@
-from server import db
+from settings import db
 
 # Drop all of the existing database tables
 # print("db.drop_all()")
