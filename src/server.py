@@ -28,7 +28,6 @@ def get_root():
         if account:
             return account, 200
         else:
-            app.logger.warning("GET /api no Account for: %s" % email)
             return "Wrong Credentials", 403
 
     except OperationalError as oe:
