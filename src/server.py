@@ -18,7 +18,7 @@ def ping():
     return "ping", 200
 
 @app.route('/api/', methods=['GET'])
-def get_root():
+def login():
     try:
         app.logger.warning("GET /api %s" % request.args)
         email = request.args.get("email")
@@ -41,7 +41,7 @@ def get_root():
 
 
 @app.route('/api/', methods=['PUT'])
-def put_root():
+def update_settings():
     try:
         data = json.loads(request.data)
         app.logger.warning("PUT /api/ %s" % data)
@@ -88,7 +88,7 @@ def register():
 
 
 @app.route('/api/bot/<user>/<pw>', methods=['POST', 'GET'])
-def bot(user, pw):
+def bot_activity(user, pw):
     try:
         if request.method == 'POST':
             app.logger.warning("POST /api/%s/%s %s: %s" % (user, pw, request.data))
