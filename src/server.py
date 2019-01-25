@@ -1,5 +1,4 @@
 import json
-from flask import jsonify
 from flask import request
 from flask_cors import CORS
 from sqlalchemy.exc import OperationalError
@@ -32,7 +31,7 @@ def login():
 
     except OperationalError as oe:
         app.logger.error("GET /api/ %s" % oe)
-        get_root()
+        login()
 
     except Exception as exc:
         # 500 Internal Server Error
@@ -56,7 +55,7 @@ def update_settings():
 
     except OperationalError as oe:
         app.logger.error("GET /api/ %s" % oe)
-        put_root()
+        update_settings()
 
     except Exception as exc:
         # 500 Internal Server Error
