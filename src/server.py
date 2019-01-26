@@ -1,8 +1,7 @@
 import json
 from flask import request
 from flask_cors import CORS
-from sqlalchemy.dialects.postgresql import psycopg2
-from sqlalchemy.exc import OperationalError
+from sqlalchemy.exc import OperationalError, IntegrityError
 
 from config import setup_mail
 
@@ -81,14 +80,15 @@ def register():
         app.logger.error("PUT /api/ %s" % oe)
         register()
 
+    except IntegrityError as exc:
+        app.logger.error("PUT /api/register/ %s" % exc)
+        return "Wrong Credentials", 403
+
     except Exception as exc:
         # 500 Internal Server Error
         app.logger.error("PUT /api/register/ %s" % exc)
         return str(exc), 500
 
-    except psycopg2.IntegrityError as exc:
-        app.logger.error("PUT /api/register/ %s" % exc)
-        return "Wrong Credentials", 403
 
 @app.route('/api/bot/<user>/<pw>', methods=['POST', 'GET'])
 def bot_activity(user, pw):
