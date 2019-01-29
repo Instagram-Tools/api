@@ -30,8 +30,8 @@ def login():
             return "Wrong Credentials", 403
 
     except OperationalError as oe:
-        app.logger.error("GET /api/ %s" % oe)
-        login()
+        app.logger.error("OperationalError at GET /api/ %s" % oe)
+        return login()
 
     except Exception as exc:
         # 500 Internal Server Error
@@ -54,8 +54,8 @@ def update_settings():
         return "updated %r" % user
 
     except OperationalError as oe:
-        app.logger.error("GET /api/ %s" % oe)
-        update_settings()
+        app.logger.error("OperationalError at GET /api/ %s" % oe)
+        return update_settings()
 
     except Exception as exc:
         # 500 Internal Server Error
@@ -77,8 +77,8 @@ def register():
         return "created %r" % user
 
     except OperationalError as oe:
-        app.logger.error("PUT /api/ %s" % oe)
-        register()
+        app.logger.error("OperationalError at PUT /api/ %s" % oe)
+        return register()
 
     except IntegrityError as exc:
         app.logger.error("PUT /api/register/ %s" % exc)
@@ -104,7 +104,8 @@ def bot_activity(user, pw):
         return 404
 
     except OperationalError as oe:
-        app.logger.error("GET /api/%s/%s %s" % (user, pw, oe))
+        app.logger.error("OperationalError at GET /api/%s/%s %s" % (user, pw, oe))
+        return bot_activity(user, pw)
 
     except Exception as exc:
         # 500 Internal Server Error
