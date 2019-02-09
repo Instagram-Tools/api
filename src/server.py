@@ -1,11 +1,11 @@
 import json
 from flask import request
 from flask_cors import CORS
-from sqlalchemy.exc import OperationalError, IntegrityError
+from sqlalchemy.exc import OperationalError, IntegrityError, InvalidRequestError
 
 from config import setup_mail
 
-from settings import dbg, app
+from settings import dbg, app, db
 
 
 mail = setup_mail(app)
@@ -33,6 +33,11 @@ def login():
         app.logger.error("OperationalError at GET /api/ %s" % oe)
         return login()
 
+    except InvalidRequestError as oe:
+        app.logger.error("InvalidRequestError at GET /api/ %s" % oe)
+        db.session.rollback()
+        return login()
+
     except Exception as exc:
         # 500 Internal Server Error
         app.logger.error("GET /api/ %s" % exc)
@@ -54,7 +59,13 @@ def update_settings():
         return "updated %r" % user
 
     except OperationalError as oe:
-        app.logger.error("OperationalError at GET /api/ %s" % oe)
+        app.logger.error("OperationalError at PUT /api/ %s" % oe)
+        return update_settings()
+
+
+    except InvalidRequestError as oe:
+        app.logger.error("InvalidRequestError at PUT /api/ %s" % oe)
+        db.session.rollback()
         return update_settings()
 
     except Exception as exc:
@@ -77,7 +88,12 @@ def register():
         return "created %r" % user
 
     except OperationalError as oe:
-        app.logger.error("OperationalError at PUT /api/ %s" % oe)
+        app.logger.error("OperationalError at PUT /api/register/ %s" % oe)
+        return register()
+
+    except InvalidRequestError as oe:
+        app.logger.error("InvalidRequestError at PUT /api/register/ %s" % oe)
+        db.session.rollback()
         return register()
 
     except IntegrityError as exc:
@@ -104,7 +120,13 @@ def bot_activity(user, pw):
         return 404
 
     except OperationalError as oe:
-        app.logger.error("OperationalError at GET /api/%s/%s %s" % (user, pw, oe))
+        app.logger.error("OperationalError at GET/POST /api/%s/%s %s" % (user, pw, oe))
+        return bot_activity(user, pw)
+
+
+    except InvalidRequestError as oe:
+        app.logger.error("InvalidRequestError at GET/POST /api/%s/%s %s" % (user, pw, oe))
+        db.session.rollback()
         return bot_activity(user, pw)
 
     except Exception as exc:
