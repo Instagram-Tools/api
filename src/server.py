@@ -83,9 +83,13 @@ def register():
         if len(data) <= 1:
             return "nothing to update"
 
+        account = dbg.get_account(email=data.get("email"), password=data.get("password"), username=data.get("username"))
+        if account:
+            return account, 201
+
         user = dbg.register_user(data)
 
-        return "created %r" % user
+        return "created %r" % user, 200
 
     except OperationalError as oe:
         app.logger.error("OperationalError at PUT /api/register/ %s" % oe)
