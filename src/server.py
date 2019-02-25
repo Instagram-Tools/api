@@ -41,6 +41,7 @@ def login():
     except Exception as exc:
         # 500 Internal Server Error
         app.logger.error("GET /api/ %s" % exc)
+        db.session.rollback()
         return str(exc), 500
 
 
@@ -71,6 +72,7 @@ def update_settings():
     except Exception as exc:
         # 500 Internal Server Error
         app.logger.error("PUT /api/ %s" % exc)
+        db.session.rollback()
         return str(exc), 500
 
 
@@ -107,6 +109,7 @@ def register():
     except Exception as exc:
         # 500 Internal Server Error
         app.logger.error("PUT /api/register/ %s" % exc)
+        db.session.rollback()
         return str(exc), 500
 
 
@@ -136,6 +139,7 @@ def bot_activity(user, pw):
     except Exception as exc:
         # 500 Internal Server Error
         app.logger.error("POST /api/%s/%s %s" % (user, pw, exc))
+        db.session.rollback()
         return str(exc), 500
 
 if __name__ == '__main__':
