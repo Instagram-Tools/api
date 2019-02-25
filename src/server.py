@@ -35,12 +35,14 @@ def login():
 
     except InvalidRequestError as oe:
         app.logger.error("InvalidRequestError at GET /api/ %s" % oe)
+        app.logger.warning("run rollback()")
         db.session.rollback()
         return login()
 
     except Exception as exc:
         # 500 Internal Server Error
         app.logger.error("GET /api/ %s" % exc)
+        app.logger.warning("run rollback()")
         db.session.rollback()
         return str(exc), 500
 
@@ -66,12 +68,14 @@ def update_settings():
 
     except InvalidRequestError as oe:
         app.logger.error("InvalidRequestError at PUT /api/ %s" % oe)
+        app.logger.warning("run rollback()")
         db.session.rollback()
         return update_settings()
 
     except Exception as exc:
         # 500 Internal Server Error
         app.logger.error("PUT /api/ %s" % exc)
+        app.logger.warning("run rollback()")
         db.session.rollback()
         return str(exc), 500
 
@@ -99,6 +103,7 @@ def register():
 
     except InvalidRequestError as oe:
         app.logger.error("InvalidRequestError at PUT /api/register/ %s" % oe)
+        app.logger.warning("run rollback()")
         db.session.rollback()
         return register()
 
@@ -109,6 +114,7 @@ def register():
     except Exception as exc:
         # 500 Internal Server Error
         app.logger.error("PUT /api/register/ %s" % exc)
+        app.logger.warning("run rollback()")
         db.session.rollback()
         return str(exc), 500
 
@@ -133,12 +139,14 @@ def bot_activity(user, pw):
 
     except InvalidRequestError as oe:
         app.logger.error("InvalidRequestError at GET/POST /api/%s/%s %s" % (user, pw, oe))
+        app.logger.warning("run rollback()")
         db.session.rollback()
         return bot_activity(user, pw)
 
     except Exception as exc:
         # 500 Internal Server Error
         app.logger.error("POST /api/%s/%s %s" % (user, pw, exc))
+        app.logger.warning("run rollback()")
         db.session.rollback()
         return str(exc), 500
 
