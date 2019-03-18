@@ -56,10 +56,10 @@ def update_settings():
         if len(data) <= 1:
             return "nothing to update"
 
-        user = dbg.update_account(data)
-        dbg.update_timetable(user, data)
+        account = dbg.update_account(data)
+        dbg.update_timetable(account, data)
 
-        return "updated %r" % user
+        return "updated Account %r" % account
 
     except OperationalError as oe:
         app.logger.error("OperationalError at PUT /api/ %s" % oe)
