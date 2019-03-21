@@ -68,8 +68,6 @@ class DB_GateWay:
             if data.get("settings"):
                 first.settings = json.dumps(data.get("settings"))
             if data.get("started"):
-                first.started = data.get("started")
-            if data.get("bot_on"):
                 first.started = data.get("bot_on")
             first.timestamp = timestamp()
             self.db.session.commit()
@@ -78,7 +76,7 @@ class DB_GateWay:
         user: self.models.User = self.find_user(data.get("email"))
         account = self.models.Account(username=data.get("username"), password=data.get("password"),
                                       settings=data.get("settings"), timestamp=timestamp(),
-                                      started=data.get("started"), user_id=user.id,
+                                      started=data.get("bot_on"), user_id=user.id,
                                       subscription=data.get("subscription"), paid=True)  # TODO set paid via pay-manager
         self.db.session.add(account)
         self.db.session.commit()
