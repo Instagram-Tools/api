@@ -66,12 +66,11 @@ class DB_GateWay:
             self.logger.warning("Wrong Password for User with Email: %s" % email)
             return []
 
-        if not (username and len(str(username)) > 0):
-            if user and len(user.accounts) > 0:
-                return list(map(lambda account: account.username, user.accounts))
-            else:
-                self.logger.warning("There is no Account owned by %s" % user)
-                return []
+        if user:
+            return list(map(lambda account: account.username, user.accounts))
+        else:
+            self.logger.warning("There is no Account owned by %s" % user)
+            return []
 
     def update_account(self, data):
         first: self.models.Account = self.find_account(data.get("username"))
