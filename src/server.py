@@ -56,12 +56,12 @@ def update_settings():
         if len(data) <= 1:
             return "nothing to update"
 
-        email = request.args.get("email")
-        e_password = request.args.get("e_password")
-        username = request.args.get('username')
+        email = data.get("email")
+        e_password = data.get("e_password")
+        username = data.get('username')
         usernames = dbg.get_account_usernames(email=email, password=e_password)
         if not username in usernames:
-            return "Wrong Credentials", 403
+            return "Wrong Credentials. You have only access to: %s" % usernames, 403
 
         account = dbg.update_account(data)
         dbg.update_timetable(account, data)
