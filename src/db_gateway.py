@@ -56,6 +56,10 @@ class DB_GateWay:
                 self.logger.warning("There is no Account owned by %s" % user)
                 return jsonify({})
 
+        result = self.get_account_data(username)
+        self.logger.warning("GET /api result: %s" % result)
+        return jsonify(result)
+
     def get_account_usernames(self, email, password):
         user = self.verify_user(email=email, password=password)
         if not user:
