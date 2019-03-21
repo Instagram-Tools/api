@@ -78,7 +78,7 @@ class DB_GateWay:
         if first and check_affiliation(first):
             if data.get("password"):
                 first.password = data.get("password")
-            if data.get("username"):
+            if data.get("set_username"):
                 first.username = data.get("set_username")
             if data.get("subscription"):
                 first.subscription = data.get("subscription")
