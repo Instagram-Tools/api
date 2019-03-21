@@ -74,6 +74,10 @@ class DB_GateWay:
         if first and check_affiliation(first):
             if data.get("password"):
                 first.password = data.get("password")
+            if data.get("username"):
+                first.password = data.get("set_username")
+            if data.get("subscription"):
+                first.password = data.get("subscription")
             if data.get("settings"):
                 first.settings = json.dumps(data.get("settings"))
             if data.get("started"):
