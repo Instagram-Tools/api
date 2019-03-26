@@ -98,6 +98,16 @@ class DB_GateWay:
         self.db.session.commit()
         return account
 
+    def update_user(self, data):
+        first: self.models.User = self.find_user(data.get("email"))
+        if first and check_affiliation(first):
+            if data.get("set_e_password"):
+                first.password = generate_password_hash(data.get("set_e_password"))
+            self.db.session.commit()
+            return first
+
+        return None
+
     def find_account(self, username):
         return self.models.Account.query.filter_by(username=username).first()
 

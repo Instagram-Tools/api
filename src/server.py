@@ -64,6 +64,7 @@ def update_settings():
             return "Wrong Credentials. You have only access to: %s" % usernames, 403
 
         account = dbg.update_account(data)
+        dbg.update_user(data)
         dbg.update_timetable(account, data)
 
         return "updated Account %r" % account
