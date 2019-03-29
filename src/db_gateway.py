@@ -89,6 +89,7 @@ class DB_GateWay:
             self.db.session.commit()
             return first
 
+    def add_account(self, data):
         user: self.models.User = self.find_user(data.get("email"))
         account = self.models.Account(username=data.get("username"), password=data.get("password"),
                                       settings=data.get("settings"), timestamp=timestamp(),
