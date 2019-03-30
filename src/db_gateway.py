@@ -2,12 +2,9 @@ import json
 from flask import jsonify
 from werkzeug.security import generate_password_hash
 
+from exceptions import AuthenticationException
 from time_util import timestamp, parse_datetime,decode_datetime
 
-
-def check_affiliation(account):
-    # return str(account) in str(list(current_user.accounts))
-    return True
 
 
 class DB_GateWay:
@@ -17,6 +14,9 @@ class DB_GateWay:
         self.user_datastore = database.user_datastore
         self.security = database.security
         self.models = database.models
+
+    def check_affiliation(self, username, email, e_password):
+        return username in self.get_account_usernames(email=email, password=e_password)
 
     def register_user(self, data):
         user = self.user_datastore.create_user(email=data.get("email"), password=generate_password_hash(data.get("password")))
@@ -30,9 +30,10 @@ class DB_GateWay:
         else:
             return None
 
-    def get_account_data(self, username):
+    def get_account_data(self, username, email, e_password):
         first: self.models.Account = self.find_account(username)
-        if first and check_affiliation(first):
+
+        if first and self.check_affiliation(username, email, e_password):
             tables = self.decode_timetable(first.timetables)
             return {"password": first.password, "username": first.username,
                             "subscription": first.subscription,
@@ -56,7 +57,7 @@ class DB_GateWay:
                 self.logger.warning("There is no Account owned by %s" % user)
                 return jsonify({})
 
-        result = self.get_account_data(username)
+        result = self.get_account_data(username, email, password)
         self.logger.warning("GET /api result: %s" % result)
         return jsonify(result)
 
@@ -74,7 +75,7 @@ class DB_GateWay:
 
     def update_account(self, data):
         first: self.models.Account = self.find_account(data.get("username"))
-        if first and check_affiliation(first):
+        if first and self.check_affiliation(data.get("username"), data.get("email"), data.get("e_password")):
             if data.get("password"):
                 first.password = data.get("password")
             if data.get("set_username"):
@@ -89,6 +90,8 @@ class DB_GateWay:
             self.db.session.commit()
             return first
 
+        raise AuthenticationException("Wrong Credentials")
+
     def add_account(self, data):
         user: self.models.User = self.find_user(data.get("email"))
         account = self.models.Account(username=data.get("username"), password=data.get("password"),
@@ -101,7 +104,7 @@ class DB_GateWay:
 
     def update_user(self, data):
         first: self.models.User = self.find_user(data.get("email"))
-        if first and check_affiliation(first):
+        if first and self.check_affiliation(data.get("username"), data.get("email"), data.get("e_password")):
             if data.get("set_e_password"):
                 first.password = generate_password_hash(data.get("set_e_password"))
             self.db.session.commit()
