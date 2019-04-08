@@ -26,6 +26,8 @@ services:
       - SSH_PORT=tk
       - IP=tk
       - SECURITY_PASSWORD_SALT=tk
+    env_file:
+      - .env/.api_mail.env
   postgres:
     image: postgres:latest
     volumes:

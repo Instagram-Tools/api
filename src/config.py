@@ -14,11 +14,13 @@ class BaseConfig(object):
         DB_USER, DB_PASS, DB_SERVICE, DB_PORT, DB_NAME
     )
     SECURITY_PASSWORD_SALT = os.environ['SECURITY_PASSWORD_SALT']
-    # SECURITY_CONFIRMABLE = True
-    SECURITY_REGISTERABLE = True
-    # SECURITY_RECOVERABLE = True
-    # SECURITY_CHANGEABLE = True
+    # SECURITY_CONFIRMABLE = True   # /confirm
+    # SECURITY_REGISTERABLE = True  # /register
+    # SECURITY_CHANGEABLE = True    # /change
+    SECURITY_RECOVERABLE = True  # /reset
+    SECURITY_RESET_URL = '/api/reset'
 
+    SECURITY_EMAIL_SENDER = os.environ['SECURITY_EMAIL_SENDER']
 
 # At top of file
 from flask_mail import Mail
@@ -26,11 +28,11 @@ from flask_mail import Mail
 
 # After 'Create app'
 def setup_mail(app):
-    # app.config['MAIL_SERVER'] = 'smtp.example.com'
-    # app.config['MAIL_PORT'] = 465
-    # app.config['MAIL_USE_SSL'] = True
-    # app.config['MAIL_USERNAME'] = 'username'
-    # app.config['MAIL_PASSWORD'] = 'password'
+    app.config['MAIL_SERVER'] = os.environ['MAIL_SERVER']
+    app.config['MAIL_PORT'] = os.environ['MAIL_PORT']
+    app.config['MAIL_USE_SSL'] = os.environ.get('MAIL_USE_SSL', True)
+    app.config['MAIL_USERNAME'] = os.environ['MAIL_USERNAME']
+    app.config['MAIL_PASSWORD'] = os.environ['MAIL_PASSWORD']
     app.config['MAIL_DEBUG'] = 1 if app.debug else 0
     mail = Mail(app)
     return mail
