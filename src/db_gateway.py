@@ -52,12 +52,14 @@ class DB_GateWay:
         if not (username and len(str(username)) > 0):
             if user and len(user.accounts) > 0:
                 username = user.accounts[0].username
+                started = user.accounts[0].started
                 self.logger.warning("GET /api username: %s" % username)
             else:
                 self.logger.warning("There is no Account owned by %s" % user)
                 return jsonify({})
 
         result = self.get_account_data(username, email, password)
+        result["started"] = started
         self.logger.warning("GET /api result: %s" % result)
         return jsonify(result)
 
@@ -85,7 +87,7 @@ class DB_GateWay:
             if data.get("settings"):
                 first.settings = json.dumps(data.get("settings"))
             if data.get("started"):
-                first.started = data.get("bot_on")
+                first.started = data.get("started")
             first.timestamp = timestamp()
             self.db.session.commit()
             return first
