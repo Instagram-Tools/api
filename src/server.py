@@ -4,6 +4,7 @@ from flask_cors import CORS
 from sqlalchemy.exc import OperationalError, IntegrityError, InvalidRequestError
 
 from config import setup_mail
+from exceptions import AuthenticationException
 
 from settings import dbg, app, db
 
@@ -56,17 +57,11 @@ def update_settings():
         if len(data) <= 1:
             return "nothing to update"
 
-        email = data.get("email")
-        e_password = data.get("e_password")
         username = data.get("username")
 
         if not dbg.find_account(username=username):
             account = dbg.add_account(data)
         else:
-            usernames = dbg.get_account_usernames(email=email, password=e_password)
-            if not username in usernames:
-                return "Wrong Credentials. You have only access to: %s" % usernames, 403
-
             account = dbg.update_account(data)
 
         dbg.update_user(data)
@@ -78,6 +73,9 @@ def update_settings():
         app.logger.error("OperationalError at PUT /api/ %s" % oe)
         return update_settings()
 
+    except AuthenticationException as exc:
+        app.logger.error("AuthenticationException at PUT /api/ %s" % exc)
+        return str(exc), 403
 
     except InvalidRequestError as oe:
         app.logger.error("InvalidRequestError at PUT /api/ %s" % oe)
