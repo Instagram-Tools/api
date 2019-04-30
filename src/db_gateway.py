@@ -51,14 +51,16 @@ class DB_GateWay:
 
         if not (username and len(str(username)) > 0):
             if user and len(user.accounts) > 0:
-                username = user.accounts[0].username
+                u = user.accounts[0].username
                 started = user.accounts[0].started
                 self.logger.warning("GET /api username: %s" % username)
             else:
                 self.logger.warning("There is no Account owned by %s" % user)
                 return jsonify({})
+        else:
+            u = username
 
-        result = self.get_account_data(username, email, password)
+        result = self.get_account_data(u, email, password)
         result["started"] = started
         self.logger.warning("GET /api result: %s" % result)
         return jsonify(result)
