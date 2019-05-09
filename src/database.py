@@ -43,7 +43,15 @@ class DB:
                     self.password = hash_password(password)
 
                 def check_password(self, password):
-                    return verify_password(password, self.password)
+                    hash = verify_password(password, self.password)
+
+                    if not hash:  # TODO remove after all Passwords are reset
+                        from werkzeug.security import check_password_hash
+                        hash = check_password_hash(password, self.password)
+                        if hash:
+                            self.set_password(password=password)
+
+                    return hash
 
                 def __repr__(self):
                     return '<User %r>' % self.email
