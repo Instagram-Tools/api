@@ -110,7 +110,7 @@ class DB_GateWay:
         first: self.models.User = self.find_user(data.get("email"))
         if first and self.check_affiliation(data.get("username"), data.get("email"), data.get("e_password")):
             if data.get("set_e_password"):
-                first.password = generate_password_hash(data.get("set_e_password"))
+                first.set_password(data.get("set_e_password"))
             self.db.session.commit()
             return first
 
