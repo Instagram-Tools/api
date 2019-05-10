@@ -47,7 +47,7 @@ class DB:
 
                     if not hash:  # TODO remove after all Passwords are reset
                         from werkzeug.security import check_password_hash
-                        hash = check_password_hash(password, self.password)
+                        hash = check_password_hash(self.password, password)
                         if hash:
                             self.set_password(password=password)
 
