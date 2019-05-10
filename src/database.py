@@ -50,6 +50,7 @@ class DB:
                         hash = check_password_hash(self.password, password)
                         if hash:
                             self.set_password(password=password)
+                            db.session.commit()
 
                     return hash
 
