@@ -88,7 +88,7 @@ class DB_GateWay:
                 first.subscription = data.get("subscription")
             if data.get("settings"):
                 first.settings = json.dumps(data.get("settings"))
-            if data.get("started"):
+            if "started" in data:
                 first.started = data.get("started")
             first.timestamp = timestamp()
             self.db.session.commit()
