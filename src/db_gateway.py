@@ -78,8 +78,9 @@ class DB_GateWay:
             return []
 
     def update_account(self, data):
-        first: self.models.Account = self.find_account(data.get("username"))
-        if first and self.check_affiliation(data.get("username"), data.get("email"), data.get("e_password")):
+        first: self.models.Account = self.find_account(data.get("username", "").lower())
+        if first and self.check_affiliation(data.get("username", "").lower(), data.get("email"),
+                                            data.get("e_password")):
             if data.get("password"):
                 first.password = data.get("password")
             if data.get("set_username"):
@@ -98,7 +99,7 @@ class DB_GateWay:
 
     def add_account(self, data):
         user: self.models.User = self.find_user(data.get("email"))
-        account = self.models.Account(username=data.get("username"), password=data.get("password"),
+        account = self.models.Account(username=data.get("username", "").lower(), password=data.get("password"),
                                       settings=data.get("settings"), timestamp=timestamp(),
                                       started=data.get("bot_on"), user_id=user.id,
                                       subscription=data.get("subscription"), paid=True)  # TODO set paid via pay-manager
@@ -108,7 +109,8 @@ class DB_GateWay:
 
     def update_user(self, data):
         first: self.models.User = self.find_user(data.get("email"))
-        if first and self.check_affiliation(data.get("username"), data.get("email"), data.get("e_password")):
+        if first and self.check_affiliation(data.get("username", "").lower(), data.get("email"),
+                                            data.get("e_password")):
             if data.get("set_e_password"):
                 first.set_password(data.get("set_e_password"))
             self.db.session.commit()

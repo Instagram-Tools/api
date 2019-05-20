@@ -57,7 +57,7 @@ def update_settings():
         if len(data) <= 1:
             return "nothing to update"
 
-        username = data.get("username")
+        username = data.get("username", "").lower()
 
         if not dbg.find_account(username=username):
             account = dbg.add_account(data)
@@ -100,7 +100,8 @@ def register():
         if len(data) <= 1:
             return "nothing to update"
 
-        account = dbg.get_account(email=data.get("email"), password=data.get("password"), username=data.get("username"))
+        account = dbg.get_account(email=data.get("email"), password=data.get("password"),
+                                  username=data.get("username", "").lower())
         if account:
             return account, 201
 
