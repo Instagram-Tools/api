@@ -84,7 +84,7 @@ class DB_GateWay:
             if data.get("password"):
                 first.password = data.get("password")
             if data.get("set_username"):
-                first.username = data.get("set_username")
+                first.username = data.get("set_username", "").lower()
             if data.get("subscription"):
                 first.subscription = data.get("subscription")
             if data.get("settings"):
