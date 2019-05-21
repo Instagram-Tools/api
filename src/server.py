@@ -131,7 +131,7 @@ def register():
         return str(exc), 500
 
 
-@app.route('/api/bot/<user>/<pw>', methods=['POST', 'GET'])
+@app.route('/api/bot/activity/<user>/<pw>', methods=['POST', 'GET'])
 def bot_activity(user, pw):
     try:
         if request.method == 'POST':
