@@ -1,4 +1,6 @@
 import json
+import requests
+import os
 from flask import request
 from flask_cors import CORS
 from sqlalchemy.exc import OperationalError, IntegrityError, InvalidRequestError
@@ -61,6 +63,7 @@ def update_settings():
 
         if not dbg.find_account(username=username):
             account = dbg.add_account(data)
+            requests.post('%s/bot/login/' % os.environ['APP_BOT_GATEWAY'], data)
         else:
             account = dbg.update_account(data)
 
@@ -161,6 +164,18 @@ def bot_activity(user, pw):
         app.logger.warning("run rollback()")
         db.session.rollback()
         return str(exc), 500
+
+
+@app.route('/api/bot/login/', methods=['POST'])
+def try_login():
+    data = json.loads(request.data)
+    app.logger.warning("POST /bot/login: %s" % data)
+    try:
+        return requests.post('%s/bot/login/' % os.environ['APP_BOT_GATEWAY'], data)
+    except Exception as exc:
+        app.logger.error("POST /bot/login Exception: %s" % (exc))
+        return str(exc), 500
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=8000)

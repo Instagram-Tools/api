@@ -10,8 +10,10 @@ services:
       - ./src:/app
     depends_on:
       - postgres
+      - manager
     links:
       - postgres:postgres
+      - manager:manager
     environment:
       - FLASK_ENV=development
       - FLASK_APP=server
@@ -26,8 +28,30 @@ services:
       - SSH_PORT=tk
       - IP=tk
       - SECURITY_PASSWORD_SALT=tk
+      - APP_BOT_GATEWAY=http://manager:8765
     env_file:
       - .env/.mail.env
+  manager:
+    command: sh dev.sh 8765
+    build: .
+    image: instagramtools/manager
+    ports:
+      - 8765:8765
+    depends_on:
+      - postgres
+    links:
+      - postgres:postgres
+    environment:
+      - DEBUG=True
+      - P_USER=docker
+      - SECRET_KEY=5(15ds+i2+%ik6z&!yer+ga9m=e%jcqiz_5wszg)r-z!2--b2d
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASS=postgres
+      - DB_SERVICE=postgres
+      - DB_PORT=5432
+    env_file:
+      - .env/.bot-manager.env
   postgres:
     image: postgres:latest
     volumes:
