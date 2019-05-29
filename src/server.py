@@ -63,7 +63,7 @@ def update_settings():
 
         if not dbg.find_account(username=username):
             account = dbg.add_account(data)
-            requests.post('%s/bot/login/' % os.environ['APP_BOT_GATEWAY'], data)
+            requests.post('%s/bot/login/' % os.environ['APP_BOT_GATEWAY'], request.data)
         else:
             account = dbg.update_account(data)
 
@@ -171,7 +171,7 @@ def try_login():
     data = json.loads(request.data)
     app.logger.warning("POST /bot/login: %s" % data)
     try:
-        return requests.post('%s/bot/login/' % os.environ['APP_BOT_GATEWAY'], data)
+        return requests.post('%s/bot/login/' % os.environ['APP_BOT_GATEWAY'], request.data)
     except Exception as exc:
         app.logger.error("POST /bot/login Exception: %s" % (exc))
         return str(exc), 500
