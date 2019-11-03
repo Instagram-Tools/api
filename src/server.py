@@ -177,5 +177,24 @@ def try_login():
         return str(exc), 500
 
 
+@app.route('/api/bot/stop/<account>', methods=['GET'])
+def stop(account):
+    app.logger.warning("GET /bot/stop/%s" % account)
+    try:
+        return requests.get('%s/bot/stop/%s' % (os.environ['APP_BOT_GATEWAY'], account))
+    except Exception as exc:
+        app.logger.error("GET /bot/stop/%s Exception: %s" % (account, exc))
+        return str(exc), 500
+
+
+@app.route('/api/bot/start/<account>', methods=['GET'])
+def start(account):
+    app.logger.warning("GET /bot/start/%s" % account)
+    try:
+        return requests.get('%s/bot/start/%s' % (os.environ['APP_BOT_GATEWAY'], account))
+    except Exception as exc:
+        app.logger.error("GET /bot/start/%s Exception: %s" % (account, exc))
+        return str(exc), 500
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=8000)
