@@ -196,5 +196,16 @@ def start(account):
         app.logger.error("GET /bot/start/%s Exception: %s" % (account, exc))
         return str(exc), 500
 
+
+@app.route('/api/mail/', methods=['POST'])
+def mail():
+    data = json.loads(request.data)
+    app.logger.warning("POST /mail: %s" % data)
+    try:
+        return requests.post('%s/mail/' % os.environ['APP_MAIL_GATEWAY'], request.data)
+    except Exception as exc:
+        app.logger.error("POST /bot/login Exception: %s" % (exc))
+        return str(exc), 500
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=8000)
