@@ -29,6 +29,7 @@ services:
       - IP=tk
       - SECURITY_PASSWORD_SALT=tk
       - APP_BOT_GATEWAY=http://manager:8765
+      - APP_MAIL_GATEWAY=http://mailserver:7070
     env_file:
       - .env/.mail.env
   manager:
